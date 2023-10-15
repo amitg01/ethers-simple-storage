@@ -5,6 +5,14 @@ require("dotenv").config();
 async function main() {
   const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+
+  // const encryptedJson = fs.readFileSync("./.encryptedKey.json", "utf8");
+  // let wallet = ethers.Wallet.fromEncryptedJsonSync(
+  //   encryptedJson,
+  //   process.env.PRIVATE_KEY_PASSWORD
+  // );
+  // wallet = wallet.connect(provider);
+
   const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf-8");
   const bin = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.bin", "utf-8");
   const contractFactory = new ethers.ContractFactory(abi, bin, wallet);
@@ -14,7 +22,7 @@ async function main() {
   const currentNumber = await contract.retrieve();
   console.log(`Current number is ${currentNumber}`);
 
-  const transactionResponse = await contract.store("7");
+  const transactionResponse = await contract.store("27");
   const transactionReceipt = await transactionResponse.wait(1);
   const updatedNumber = await contract.retrieve();
   console.log(`Updated number is ${updatedNumber}`);
