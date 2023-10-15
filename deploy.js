@@ -15,9 +15,12 @@ async function main() {
 
   const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf-8");
   const bin = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.bin", "utf-8");
+
   const contractFactory = new ethers.ContractFactory(abi, bin, wallet);
+  console.log("Deploying...");
   const contract = await contractFactory.deploy();
   await contract.deploymentTransaction().wait(1);
+  console.log(`Contract Address: ${contract.target}`);
 
   const currentNumber = await contract.retrieve();
   console.log(`Current number is ${currentNumber}`);
